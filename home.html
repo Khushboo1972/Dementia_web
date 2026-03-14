@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Welcome to Shallion Dementia Support</h1>
+            <p>Connecting those in need with volunteers who want to help</p>
+            <div class="btn-container">
+                <a href="{% url 'accounts:client_login' %}" class="btn btn-primary">Client</a>
+                <a href="{% url 'accounts:volunteer_login' %}" class="btn btn-secondary">Volunteer</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="features">
+        <!-- Add feature sections here -->
+    </div>
+</div>
+{% endblock %}

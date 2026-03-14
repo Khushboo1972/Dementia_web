@@ -1,0 +1,444 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - Shallion Dementia Support{% endblock %}
+
+{% block extra_css %}
+<style>
+    .about-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    
+    .about-hero {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        color: white;
+        padding: 80px 20px;
+        text-align: center;
+        border-radius: 0 0 20px 20px;
+        margin-bottom: 60px;
+    }
+    
+    .about-hero h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+    
+    .about-hero p {
+        font-size: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        opacity: 0.9;
+    }
+    
+    .mission-section {
+        text-align: center;
+        margin-bottom: 80px;
+        padding: 0 20px;
+    }
+    
+    .mission-statement {
+        font-size: 28px;
+        color: #2c3e50;
+        font-style: italic;
+        max-width: 900px;
+        margin: 0 auto 40px;
+        line-height: 1.6;
+    }
+    
+    .mission-statement::before {
+        content: '"';
+        font-size: 60px;
+        color: #3498db;
+        position: relative;
+        top: 30px;
+        left: -20px;
+    }
+    
+    .mission-statement::after {
+        content: '"';
+        font-size: 60px;
+        color: #3498db;
+        position: relative;
+        top: 30px;
+        left: 20px;
+    }
+    
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 80px;
+    }
+    
+    .value-card {
+        background: white;
+        border-radius: 12px;
+        padding: 40px 30px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        text-align: center;
+    }
+    
+    .value-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .value-icon {
+        font-size: 50px;
+        margin-bottom: 25px;
+        color: #3498db;
+    }
+    
+    .value-card h3 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        font-size: 24px;
+    }
+    
+    .value-card p {
+        color: #7f8c8d;
+        line-height: 1.6;
+    }
+    
+    .team-section {
+        margin-bottom: 80px;
+    }
+    
+    .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    .section-title h2 {
+        color: #2c3e50;
+        font-size: 36px;
+        margin-bottom: 15px;
+    }
+    
+    .section-title p {
+        color: #7f8c8d;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+    
+    .team-member {
+        text-align: center;
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .member-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: #ecf0f1;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        color: #3498db;
+    }
+    
+    .member-name {
+        font-size: 20px;
+        color: #2c3e50;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    
+    .member-role {
+        color: #3498db;
+        margin-bottom: 15px;
+        font-weight: 500;
+    }
+    
+    .member-bio {
+        color: #7f8c8d;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    
+    .stats-section {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 80px 20px;
+        border-radius: 20px;
+        margin-bottom: 80px;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+        text-align: center;
+    }
+    
+    .stat-item h3 {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #3498db;
+    }
+    
+    .stat-item p {
+        font-size: 18px;
+        opacity: 0.9;
+    }
+    
+    .cta-section {
+        text-align: center;
+        padding: 60px 20px;
+        background: #f8f9fa;
+        border-radius: 20px;
+        margin-bottom: 60px;
+    }
+    
+    .cta-section h2 {
+        color: #2c3e50;
+        font-size: 36px;
+        margin-bottom: 20px;
+    }
+    
+    .cta-section p {
+        color: #7f8c8d;
+        max-width: 600px;
+        margin: 0 auto 40px;
+        font-size: 18px;
+    }
+    
+    .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .btn {
+        padding: 15px 40px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+    
+    .btn-primary {
+        background: #3498db;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #2980b9;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 20px rgba(52, 152, 219, 0.3);
+    }
+    
+    .btn-outline {
+        background: white;
+        color: #2c3e50;
+        border: 2px solid #3498db;
+    }
+    
+    .btn-outline:hover {
+        background: #3498db;
+        color: white;
+        transform: translateY(-3px);
+    }
+    
+    @media (max-width: 768px) {
+        .about-hero h1 {
+            font-size: 36px;
+        }
+        
+        .about-hero p {
+            font-size: 18px;
+        }
+        
+        .mission-statement {
+            font-size: 22px;
+        }
+        
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-container">
+    <!-- Hero Section -->
+    <div class="about-hero">
+        <h1>About Shallion Dementia Support</h1>
+        <p>Connecting those affected by dementia with compassionate volunteers who want to make a difference.</p>
+    </div>
+    
+    <!-- Mission Statement -->
+    <div class="mission-section">
+        <div class="mission-statement">
+            To create meaningful connections that enhance the quality of life for individuals living with dementia and provide support for their families.
+        </div>
+    </div>
+    
+    <!-- Our Values -->
+    <div class="section-title">
+        <h2>Our Values</h2>
+        <p>These principles guide everything we do at Shallion Dementia Support</p>
+    </div>
+    
+    <div class="values-grid">
+        <div class="value-card">
+            <div class="value-icon">🤝</div>
+            <h3>Compassion</h3>
+            <p>We approach every interaction with empathy, understanding, and genuine care for the individuals and families we serve.</p>
+        </div>
+        
+        <div class="value-card">
+            <div class="value-icon">🔒</div>
+            <h3>Safety First</h3>
+            <p>All our volunteers undergo thorough vetting, including PVG checks, to ensure the safety and security of our clients.</p>
+        </div>
+        
+        <div class="value-card">
+            <div class="value-icon">💝</div>
+            <h3>Dignity</h3>
+            <p>We believe in treating every individual with the utmost respect and preserving their dignity throughout their journey.</p>
+        </div>
+        
+        <div class="value-card">
+            <div class="value-icon">🤝</div>
+            <h3>Community</h3>
+            <p>Building supportive communities where individuals feel connected, valued, and understood.</p>
+        </div>
+        
+        <div class="value-card">
+            <div class="value-icon">🌱</div>
+            <h3>Sustainability</h3>
+            <p>Creating lasting support systems that grow and adapt to meet changing needs over time.</p>
+        </div>
+        
+        <div class="value-card">
+            <div class="value-icon">🎯</div>
+            <h3>Excellence</h3>
+            <p>Continuously improving our services and maintaining the highest standards of care and support.</p>
+        </div>
+    </div>
+    
+    <!-- Our Story -->
+    <div class="section-title">
+        <h2>Our Story</h2>
+    </div>
+    
+    <div style="max-width: 800px; margin: 0 auto 80px; padding: 0 20px;">
+        <p style="font-size: 18px; line-height: 1.8; color: #2c3e50; margin-bottom: 30px;">
+            Shallion Dementia Support was founded in 2018 by a group of healthcare professionals and family caregivers who recognized the growing need for personalized, compassionate support for individuals living with dementia.
+        </p>
+        
+        <p style="font-size: 18px; line-height: 1.8; color: #2c3e50; margin-bottom: 30px;">
+            After seeing the challenges faced by families navigating dementia care, we created a platform that bridges the gap between those who need support and those who want to help. What started as a small community initiative has grown into a trusted support network serving hundreds of families across the region.
+        </p>
+        
+        <p style="font-size: 18px; line-height: 1.8; color: #2c3e50;">
+            Today, we're proud to have built a community of dedicated volunteers and supported numerous families through their dementia journey, always guided by our core values of compassion, safety, and dignity.
+        </p>
+    </div>
+    
+    <!-- Statistics -->
+    <div class="stats-section">
+        <div class="section-title" style="margin-bottom: 60px;">
+            <h2 style="color: white;">Our Impact</h2>
+            <p style="color: rgba(255, 255, 255, 0.8);">Making a difference in the dementia community</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>500+</h3>
+                <p>Families Supported</p>
+            </div>
+            
+            <div class="stat-item">
+                <h3>250+</h3>
+                <p>Trained Volunteers</p>
+            </div>
+            
+            <div class="stat-item">
+                <h3>10,000+</h3>
+                <p>Support Hours Provided</p>
+            </div>
+            
+            <div class="stat-item">
+                <h3>98%</h3>
+                <p>Client Satisfaction Rate</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Team -->
+    <div class="team-section">
+        <div class="section-title">
+            <h2>Our Leadership Team</h2>
+            <p>Dedicated professionals committed to making a difference</p>
+        </div>
+        
+        <div class="team-grid">
+            <div class="team-member">
+                <div class="member-avatar">👨‍⚕️</div>
+                <div class="member-name">Dr. Sarah Johnson</div>
+                <div class="member-role">Founder & CEO</div>
+                <div class="member-bio">Former geriatric specialist with 15+ years experience in dementia care.</div>
+            </div>
+            
+            <div class="team-member">
+                <div class="member-avatar">👩‍💼</div>
+                <div class="member-name">Michael Chen</div>
+                <div class="member-role">Operations Director</div>
+                <div class="member-bio">Specializes in volunteer management and community outreach programs.</div>
+            </div>
+            
+            <div class="team-member">
+                <div class="member-avatar">👨‍⚕️</div>
+                <div class="member-name">Dr. Emily Williams</div>
+                <div class="member-role">Clinical Advisor</div>
+                <div class="member-bio">Dementia care specialist and researcher with multiple publications.</div>
+            </div>
+            
+            <div class="team-member">
+                <div class="member-avatar">👩‍💻</div>
+                <div class="member-name">David Miller</div>
+                <div class="member-role">Technology Director</div>
+                <div class="member-bio">Ensures our platform is secure, accessible, and user-friendly.</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Call to Action -->
+    <div class="cta-section">
+        <h2>Join Our Community</h2>
+        <p>Whether you need support or want to volunteer, we're here to help you make meaningful connections.</p>
+        
+        <div class="cta-buttons">
+            <a href="{% url 'accounts:client_register' %}" class="btn btn-primary">Get Support</a>
+            <a href="{% url 'accounts:volunteer_register' %}" class="btn btn-outline">Become a Volunteer</a>
+            <a href="{% url 'accounts:contact' %}" class="btn btn-outline">Contact Us</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
