@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volunteer Login - Shallion Dementia Support</title>
+<style>
+    /* ---------- Container ---------- */
+    body {
+        margin: 0;
+        font-family: 'Montserrat', sans-serif;
+        background: #F7F7F7;
+        color: #0B0B0B;
+    }
+
+    .auth-container {
+        background: linear-gradient(135deg, #61251a 0%, #3f140e 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .auth-box {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        width: 100%;
+        max-width: 450px;
+        animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+        from {opacity:0; transform: translateY(20px);}
+        to {opacity:1; transform: translateY(0);}
+    }
+
+    /* ---------- Header ---------- */
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .auth-header h2 {
+        color: #61251a;
+        font-size: 28px;
+        margin-bottom: 10px;
+        font-weight: 700;
+        font-family: 'Libre Baskerville', serif;
+        text-transform: uppercase;
+    }
+
+    .auth-header p {
+        color: #7f8c8d;
+        font-size: 16px;
+    }
+
+    /* ---------- Tabs ---------- */
+    .tabs {
+        display: flex;
+        margin-bottom: 30px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 2px solid #e0e0e0;
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 12px;
+        background: white;
+        border: none;
+        font-size: 16px;
+        font-weight: 600;
+        color: #7f8c8d;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+        background: #f8f9fa;
+    }
+
+    .tab-btn.active {
+        background: #61251a;
+        color: white;
+    }
+
+    /* ---------- Form ---------- */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 14px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #61251a;
+        box-shadow: 0 0 0 3px rgba(97, 37, 26, 0.2);
+    }
+
+    .forgot-password {
+        text-align: right;
+        margin-bottom: 20px;
+    }
+
+    .forgot-password a {
+        color: #61251a;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .forgot-password a:hover {
+        text-decoration: underline;
+    }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+        display: inline-block;
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: #61251a;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #3f140e;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(97, 37, 26, 0.3);
+    }
+
+    .btn-outline {
+        background: white;
+        color: #2c3e50;
+        border: 2px solid #e0e0e0;
+        margin-top: 10px;
+    }
+
+    .btn-outline:hover {
+        background: #f8f9fa;
+        border-color: #61251a;
+    }
+
+    /* ---------- Auth Switch ---------- */
+    .auth-switch {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .auth-switch a {
+        color: #61251a;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .auth-switch a:hover {
+        text-decoration: underline;
+    }
+
+    /* ---------- Errors ---------- */
+    .error-message {
+        color: #E53E3E;
+        font-size: 14px;
+        margin-top: 5px;
+        padding-left: 5px;
+    }
+
+    .form-control.error {
+        border-color: #E53E3E;
+    }
+
+    .alert {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        animation: slideIn 0.3s ease;
+    }
+
+    .alert-error {
+        background: #fff5f5;
+        border: 2px solid #E53E3E;
+        color: #E53E3E;
+    }
+
+    .alert-success {
+        background: #f0fff4;
+        border: 2px solid #2F855A;
+        color: #2F855A;
+    }
+</style>
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="auth-box">
+        <div class="auth-header">
+            <h2>Volunteer Registration & Login</h2>
+            <p>Access your volunteer account</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="login">Login</button>
+            <button class="tab-btn" data-tab="register">Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form">
+            <div class="form-group">
+                <label for="id_username">Email:</label>
+                <input type="email" id="id_username" class="form-control" placeholder="Enter your email" required>
+                <div class="error-message" id="email-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">Password:</label>
+                <input type="password" id="id_password" class="form-control" placeholder="Enter your password" required>
+                <div class="error-message" id="password-error"></div>
+            </div>
+
+            <div class="forgot-password">
+                <a href="#">Forgot Password?</a>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a href="#" class="btn btn-outline">Cancel</a>
+            </div>
+
+            <div class="auth-switch">
+                <p>Don't have an account? <a href="#" onclick="switchTab('register')">Register here</a></p>
+            </div>
+        </form>
+
+        <!-- Register Form -->
+        <form id="register-form" style="display:none;">
+            <div class="form-group">
+                <a href="#" class="btn btn-primary">Go to Registration Page</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab switching
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            if (this.dataset.tab === 'login') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        });
+    });
+
+    // Function to switch tabs from link
+    window.switchTab = function(tab) {
+        if(tab === 'login') {
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+        } else {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+        }
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+    }
+
+    // Form validation
+    const emailInput = document.getElementById('id_username');
+    const passwordInput = document.getElementById('id_password');
+    const emailError = document.getElementById('email-error');
+    const passwordError = document.getElementById('password-error');
+
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function showError(input, errorDiv, message) {
+        input.classList.add('error');
+        errorDiv.textContent = message;
+    }
+
+    function clearError(input, errorDiv) {
+        input.classList.remove('error');
+        errorDiv.textContent = '';
+    }
+
+    emailInput.addEventListener('blur', function() {
+        clearError(emailInput, emailError);
+        if(!this.value.trim()) showError(emailInput, emailError, 'Email is required');
+        else if(!validateEmail(this.value)) showError(emailInput, emailError, 'Please enter a valid email');
+    });
+
+    passwordInput.addEventListener('blur', function() {
+        clearError(passwordInput, passwordError);
+        if(!this.value.trim()) showError(passwordInput, passwordError, 'Password is required');
+    });
+
+    loginForm.addEventListener('submit', function(e) {
+        clearError(emailInput, emailError);
+        clearError(passwordInput, passwordError);
+        let isValid = true;
+        if(!emailInput.value.trim()) { showError(emailInput, emailError, 'Email is required'); isValid = false; }
+        else if(!validateEmail(emailInput.value)) { showError(emailInput, emailError, 'Please enter a valid email'); isValid = false; }
+        if(!passwordInput.value.trim()) { showError(passwordInput, passwordError, 'Password is required'); isValid = false; }
+        if(!isValid) e.preventDefault();
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Client Details | Shallion Admin</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ==============================
+DESIGN TOKENS (Shallion Brand)
+============================== */
+
+:root{
+
+--primary:#61251A;
+--primary-dark:#3F140E;
+--background:#F7F7F7;
+--text:#0B0B0B;
+
+--success:#2F855A;
+--error:#E53E3E;
+--warning:#856404;
+
+--radius:8px;
+--shadow:0 2px 8px rgba(0,0,0,0.06);
+
+--space-1:8px;
+--space-2:16px;
+--space-3:24px;
+--space-4:32px;
+
+--max-width:1200px;
+
+}
+
+/* ==============================
+GLOBAL
+============================== */
+
+body{
+margin:0;
+font-family:Montserrat,sans-serif;
+background:var(--background);
+color:var(--text);
+font-size:16px;
+line-height:1.5;
+}
+
+h1,h2{
+font-family:"Libre Baskerville",serif;
+margin-top:0;
+}
+
+.container{
+max-width:var(--max-width);
+margin:auto;
+padding:var(--space-4) var(--space-2);
+}
+
+/* ==============================
+NAVBAR
+============================== */
+
+.navbar{
+background:white;
+border-bottom:1px solid #ddd;
+}
+
+.nav-inner{
+max-width:var(--max-width);
+margin:auto;
+padding:16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-family:"Libre Baskerville",serif;
+font-weight:700;
+}
+
+.nav-links a{
+margin-left:16px;
+text-decoration:none;
+color:var(--primary);
+font-weight:600;
+}
+
+/* ==============================
+BACK LINK
+============================== */
+
+.back-link{
+display:inline-block;
+margin-bottom:var(--space-3);
+text-decoration:none;
+color:var(--primary);
+font-weight:600;
+}
+
+/* ==============================
+CARD
+============================== */
+
+.card{
+background:white;
+padding:var(--space-4);
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+}
+
+/* ==============================
+GRID
+============================== */
+
+.detail-grid{
+display:flex;
+gap:40px;
+flex-wrap:wrap;
+margin-top:var(--space-3);
+}
+
+.detail-section{
+flex:1 1 320px;
+background:#fff;
+padding:20px;
+border-radius:var(--radius);
+border:1px solid #eee;
+}
+
+.detail-section h2{
+margin-bottom:12px;
+font-size:20px;
+}
+
+/* ==============================
+STATUS
+============================== */
+
+.verified{
+color:var(--success);
+font-weight:600;
+}
+
+.pending{
+color:var(--warning);
+font-weight:600;
+}
+
+.missing{
+color:var(--error);
+font-weight:600;
+}
+
+/* ==============================
+BUTTONS
+============================== */
+
+.btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+padding:12px 20px;
+border-radius:var(--radius);
+border:none;
+cursor:pointer;
+font-size:14px;
+font-weight:600;
+text-decoration:none;
+min-height:44px;
+}
+
+.btn-view{
+background:var(--primary);
+color:white;
+}
+
+.btn-view:hover{
+background:var(--primary-dark);
+}
+
+.btn-success{
+background:var(--success);
+color:white;
+}
+
+.btn-primary{
+background:var(--primary);
+color:white;
+}
+
+/* ==============================
+ACTIONS
+============================== */
+
+.action-section{
+margin-top:var(--space-4);
+}
+
+.status-form{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+align-items:center;
+}
+
+.status-select{
+padding:10px;
+border-radius:var(--radius);
+border:1px solid #ccc;
+font-size:14px;
+}
+
+/* ==============================
+RESPONSIVE
+============================== */
+
+@media(max-width:768px){
+
+.detail-grid{
+flex-direction:column;
+}
+
+.status-form{
+flex-direction:column;
+align-items:flex-start;
+}
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<header class="navbar">
+
+<div class="nav-inner">
+
+<div class="logo">SHALLION</div>
+
+<div class="nav-links">
+<a href="#">Dashboard</a>
+<a href="#">Clients</a>
+<a href="#">Volunteers</a>
+</div>
+
+</div>
+
+</header>
+
+
+<main class="container">
+
+<a href="#" class="back-link">← Back to Clients</a>
+
+<div class="card">
+
+<h1>Client Details: Alice Smith</h1>
+
+<div class="detail-grid">
+
+<div class="detail-section">
+
+<h2>Personal Information</h2>
+
+<p><strong>Email:</strong> alice@email.com</p>
+<p><strong>Phone:</strong> 07400000000</p>
+<p><strong>Role:</strong> Client</p>
+<p><strong>Status:</strong> Active</p>
+<p><strong>Joined:</strong> 12 March 2025</p>
+
+</div>
+
+
+<div class="detail-section">
+
+<h2>Verification Status</h2>
+
+<p><strong>Email Verified:</strong>
+<span class="verified">✓ Yes (12 March 2025)</span>
+</p>
+
+<p><strong>GP Certificate:</strong>
+<span class="pending">⚠ Pending Review</span>
+</p>
+
+<a href="#" target="_blank" class="btn btn-view">
+View GP Certificate
+</a>
+
+</div>
+
+</div>
+
+
+<div class="action-section">
+
+<h2>Verification Actions</h2>
+
+<button class="btn btn-success" onclick="verifyCertificate()">
+✓ Verify GP Certificate
+</button>
+
+</div>
+
+
+<div class="action-section">
+
+<h2>Account Actions</h2>
+
+<form class="status-form">
+
+<select class="status-select" id="status">
+
+<option value="active">Active</option>
+<option value="suspended">Suspended</option>
+<option value="pending">Pending</option>
+
+</select>
+
+<button type="button" class="btn btn-primary" onclick="updateStatus()">
+Update Status
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</main>
+
+
+<script>
+
+/* ==========================
+VERIFY CERTIFICATE
+========================== */
+
+function verifyCertificate(){
+
+alert("GP Certificate verified successfully (demo).")
+
+}
+
+
+/* ==========================
+UPDATE STATUS
+========================== */
+
+function updateStatus(){
+
+const status=document.getElementById("status").value
+
+alert("User status updated to: "+status)
+
+}
+
+</script>
+
+</body>
+</html>

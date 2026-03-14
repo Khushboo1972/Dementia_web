@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Registration - Shallion Dementia Support</title>
+<style>
+:root {
+    --primary: #61251a;
+    --primary-dark: #3f140e;
+    --background: #F7F7F7;
+    --card-bg: #FFFFFF;
+    --text: #0B0B0B;
+    --error: #E53E3E;
+    --spacing: 8px;
+    --radius: 8px;
+    --font-body: 'Montserrat', sans-serif;
+    --font-hero: 'Libre Baskerville', serif;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
+    background: var(--background);
+    color: var(--text);
+}
+
+a { color: var(--primary); text-decoration:none;}
+a:hover { text-decoration:underline; }
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+}
+
+.auth-box {
+    background: var(--card-bg);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 32px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.auth-header h2 {
+    font-family: var(--font-hero);
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.auth-header p { text-align:center; font-size:16px; color:#7f8c8d; }
+
+.form-group { margin-bottom:20px; }
+
+label { display:block; margin-bottom:8px; font-weight:600; }
+
+input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="file"] {
+    width: 100%; padding:12px; border:2px solid #e0e0e0; border-radius: var(--radius); font-size:16px; transition: all 0.3s ease;
+    background: #FFFFFF;
+}
+
+input:focus { outline:none; border-color: var(--primary); box-shadow:0 0 0 3px rgba(97,37,26,0.2); }
+
+.error-message { color: var(--error); font-size:14px; margin-top:5px; }
+
+.form-control.error { border-color: var(--error); background:#fff5f5; }
+
+.file-upload-area { border:2px dashed var(--primary); border-radius:var(--radius); padding:25px; text-align:center; cursor:pointer; background:#f8f9fa; margin-bottom:10px; }
+.file-upload-area:hover { background:#f5f0ef; border-color:var(--primary-dark); }
+
+.file-name { font-weight:600; margin-top:8px; }
+
+.checkbox-group { display:flex; align-items:center; gap:10px; margin-bottom:20px; padding:12px; background:#f8f9fa; border-radius: var(--radius); }
+.checkbox-group input[type="checkbox"] { width:18px; height:18px; }
+
+.btn { display:inline-block; width:100%; padding:14px; border:none; border-radius: var(--radius); font-size:16px; font-weight:600; cursor:pointer; text-align:center; transition:all 0.3s ease; }
+.btn-primary { background:var(--primary); color:white; }
+.btn-primary:hover { background:var(--primary-dark); transform: translateY(-2px); box-shadow:0 5px 15px rgba(97,37,26,0.3); }
+
+.password-requirements { background:#f8f9fa; border-radius:var(--radius); padding:12px; font-size:14px; margin-top:8px; }
+.password-requirements ul { list-style:none; margin:0; padding:0; }
+.password-requirements li { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.password-requirements li::before { content:'○'; font-weight:bold; color:var(--error); }
+.password-requirements li.valid::before { content:'✓'; color:var(--primary); }
+
+.note { font-size:14px; color:#7f8c8d; text-align:center; margin-top:20px; }
+</style>
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="auth-box">
+        <div class="auth-header">
+            <h2>Client Registration</h2>
+            <p>Create your account to access support services</p>
+        </div>
+
+        <form id="register-form" novalidate>
+            <div class="form-group">
+                <label for="full_name">Full Name</label>
+                <input type="text" id="full_name" class="form-control" placeholder="Enter your full name" required>
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" class="form-control" placeholder="Enter your phone number">
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Create Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Enter password" required>
+                <div class="password-requirements">
+                    <ul>
+                        <li class="password-requirement" data-requirement="length">At least 8 characters</li>
+                        <li class="password-requirement" data-requirement="uppercase">One uppercase letter</li>
+                        <li class="password-requirement" data-requirement="lowercase">One lowercase letter</li>
+                        <li class="password-requirement" data-requirement="number">One number</li>
+                        <li class="password-requirement" data-requirement="special">One special character</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" class="form-control" placeholder="Confirm password" required>
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="file-upload-area" id="file-area">
+                    <label>
+                        <input type="file" id="gp_certificate" accept=".pdf,.jpg,.jpeg,.png" style="display:none" required>
+                        <div>📄 Upload GP Certificate</div>
+                        <div class="file-name">Click to browse files</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I agree to Terms & Conditions</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Account</button>
+        </form>
+
+        <div class="note">
+            <p><strong>Note:</strong> GP certificate is required for verification. Your certificate will be reviewed within 24-48 hours.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('register-form');
+    const fullName = document.getElementById('full_name');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm_password');
+    const gpCertificate = document.getElementById('gp_certificate');
+    const fileArea = document.getElementById('file-area');
+    const fileNameSpan = fileArea.querySelector('.file-name');
+
+    fileArea.addEventListener('click', () => gpCertificate.click());
+    gpCertificate.addEventListener('change', function() {
+        const file = this.files[0];
+        if(file) {
+            fileNameSpan.textContent = file.name;
+            const maxSize = 5 * 1024 * 1024;
+            const allowedTypes = ['application/pdf','image/jpeg','image/png'];
+            if(file.size > maxSize || !allowedTypes.includes(file.type)) {
+                alert('File must be PDF, JPG, PNG and < 5MB');
+                this.value = '';
+                fileNameSpan.textContent = 'Click to browse files';
+            }
+        }
+    });
+
+    function checkPasswordStrength(pw) {
+        return {
+            length: pw.length >= 8,
+            uppercase: /[A-Z]/.test(pw),
+            lowercase: /[a-z]/.test(pw),
+            number: /\d/.test(pw),
+            special: /[!@#$%^&*(),.?":{}|<>]/.test(pw)
+        };
+    }
+
+    password.addEventListener('input', () => {
+        const requirements = checkPasswordStrength(password.value);
+        document.querySelectorAll('.password-requirement').forEach(li => {
+            const req = li.dataset.requirement;
+            li.classList.toggle('valid', requirements[req]);
+            li.classList.toggle('invalid', !requirements[req]);
+        });
+    });
+
+    form.addEventListener('submit', e => {
+        let valid = true;
+        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+        [fullName,email,password,confirmPassword].forEach(input => input.classList.remove('error'));
+
+        if(!fullName.value.trim()){ fullName.classList.add('error'); fullName.nextElementSibling.textContent='Required'; valid=false;}
+        if(!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)){ email.classList.add('error'); email.nextElementSibling.textContent='Invalid email'; valid=false;}
+        if(!password.value.trim()){ password.classList.add('error'); password.nextElementSibling.textContent='Required'; valid=false;}
+        if(password.value !== confirmPassword.value){ confirmPassword.classList.add('error'); confirmPassword.nextElementSibling.textContent='Passwords do not match'; valid=false;}
+        if(!gpCertificate.files.length){ alert('Please upload GP certificate'); valid=false;}
+        if(!document.getElementById('terms').checked){ alert('You must accept the terms'); valid=false;}
+        if(!valid){ e.preventDefault();}
+    });
+});
+</script>
+
+</body>
+</html>

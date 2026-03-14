@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Client Login | Shallion Dementia Support</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================
+DESIGN SYSTEM
+========================= */
+
+:root{
+--primary:#61251A;
+--primary-dark:#3F140E;
+--background:#F7F7F7;
+--text:#0B0B0B;
+
+--success:#2F855A;
+--error:#E53E3E;
+
+--radius:8px;
+--shadow:0 10px 40px rgba(0,0,0,0.2);
+
+--space-1:8px;
+--space-2:16px;
+--space-3:24px;
+--space-4:32px;
+}
+
+/* =========================
+GLOBAL
+========================= */
+
+body{
+margin:0;
+font-family:Montserrat,sans-serif;
+background:var(--background);
+color:var(--text);
+font-size:16px;
+}
+
+h1,h2{
+font-family:"Libre Baskerville",serif;
+}
+
+/* =========================
+AUTH CONTAINER
+========================= */
+
+.auth-container{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:40px 20px;
+background:linear-gradient(135deg,#61251A,#3F140E);
+}
+
+/* =========================
+AUTH BOX
+========================= */
+
+.auth-box{
+background:white;
+border-radius:12px;
+box-shadow:var(--shadow);
+padding:40px;
+width:100%;
+max-width:420px;
+animation:fadeUp .5s ease;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* =========================
+HEADER
+========================= */
+
+.auth-header{
+text-align:center;
+margin-bottom:30px;
+}
+
+.auth-header h2{
+margin-bottom:8px;
+font-size:26px;
+}
+
+.auth-header p{
+color:#666;
+}
+
+/* =========================
+TABS
+========================= */
+
+.tabs{
+display:flex;
+margin-bottom:24px;
+border:2px solid #eee;
+border-radius:8px;
+overflow:hidden;
+}
+
+.tab-btn{
+flex:1;
+padding:12px;
+border:none;
+background:white;
+cursor:pointer;
+font-weight:600;
+transition:.3s;
+}
+
+.tab-btn.active{
+background:var(--primary);
+color:white;
+}
+
+/* =========================
+FORM
+========================= */
+
+.form-group{
+margin-bottom:18px;
+}
+
+label{
+display:block;
+margin-bottom:6px;
+font-weight:600;
+font-size:14px;
+}
+
+.form-control{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:2px solid #ddd;
+font-size:16px;
+transition:.2s;
+}
+
+.form-control:focus{
+outline:none;
+border-color:var(--primary);
+}
+
+.form-control.error{
+border-color:var(--error);
+}
+
+/* =========================
+ERROR
+========================= */
+
+.error-message{
+color:var(--error);
+font-size:14px;
+margin-top:4px;
+}
+
+/* =========================
+BUTTONS
+========================= */
+
+.btn{
+display:inline-block;
+width:100%;
+padding:14px;
+border:none;
+border-radius:8px;
+font-weight:600;
+cursor:pointer;
+text-align:center;
+text-decoration:none;
+font-size:16px;
+min-height:44px;
+}
+
+.btn-primary{
+background:var(--primary);
+color:white;
+}
+
+.btn-primary:hover{
+background:var(--primary-dark);
+}
+
+.btn-outline{
+margin-top:10px;
+background:white;
+border:2px solid var(--primary);
+color:var(--primary);
+}
+
+.btn-outline:hover{
+background:var(--primary);
+color:white;
+}
+
+/* =========================
+LINKS
+========================= */
+
+.forgot-password{
+text-align:right;
+margin-bottom:18px;
+}
+
+.forgot-password a{
+color:var(--primary);
+text-decoration:none;
+font-size:14px;
+}
+
+.auth-switch{
+margin-top:24px;
+text-align:center;
+border-top:1px solid #eee;
+padding-top:20px;
+}
+
+.auth-switch a{
+color:var(--primary);
+font-weight:600;
+text-decoration:none;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:500px){
+
+.auth-box{
+padding:28px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="auth-container">
+
+<div class="auth-box">
+
+<div class="auth-header">
+<h2>Client Login</h2>
+<p>Access your support account</p>
+</div>
+
+<div class="tabs">
+<button class="tab-btn active" data-tab="login">Login</button>
+<button class="tab-btn" data-tab="register">Register</button>
+</div>
+
+<!-- LOGIN FORM -->
+
+<form id="login-form">
+
+<div class="form-group">
+
+<label>Email</label>
+
+<input type="email"
+id="email"
+class="form-control"
+placeholder="Enter your email"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Password</label>
+
+<input type="password"
+id="password"
+class="form-control"
+placeholder="Enter your password"
+required>
+
+</div>
+
+<div class="forgot-password">
+<a href="#">Forgot Password?</a>
+</div>
+
+<button type="submit" class="btn btn-primary">
+Login
+</button>
+
+<a href="#" class="btn btn-outline">
+Cancel
+</a>
+
+<div class="auth-switch">
+<p>Don't have an account?
+<a href="#">Register here</a>
+</p>
+</div>
+
+</form>
+
+<!-- REGISTER FORM -->
+
+<form id="register-form" style="display:none;">
+
+<a href="#" class="btn btn-primary">
+Go to Registration Page
+</a>
+
+</form>
+
+</div>
+</div>
+
+
+<script>
+
+/* =========================
+TAB SWITCHING
+========================= */
+
+const tabs=document.querySelectorAll(".tab-btn")
+const loginForm=document.getElementById("login-form")
+const registerForm=document.getElementById("register-form")
+
+tabs.forEach(tab=>{
+
+tab.addEventListener("click",()=>{
+
+tabs.forEach(t=>t.classList.remove("active"))
+tab.classList.add("active")
+
+if(tab.dataset.tab==="login"){
+loginForm.style.display="block"
+registerForm.style.display="none"
+}else{
+loginForm.style.display="none"
+registerForm.style.display="block"
+}
+
+})
+
+})
+
+/* =========================
+FORM VALIDATION
+========================= */
+
+const form=document.getElementById("login-form")
+const email=document.getElementById("email")
+const password=document.getElementById("password")
+
+function validateEmail(emailValue){
+
+const regex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+return regex.test(emailValue)
+
+}
+
+function showError(input,message){
+
+input.classList.add("error")
+
+let error=input.parentElement.querySelector(".error-message")
+
+if(!error){
+
+error=document.createElement("div")
+error.className="error-message"
+input.parentElement.appendChild(error)
+
+}
+
+error.textContent=message
+
+}
+
+function clearError(input){
+
+input.classList.remove("error")
+
+const error=input.parentElement.querySelector(".error-message")
+
+if(error) error.remove()
+
+}
+
+form.addEventListener("submit",function(e){
+
+let valid=true
+
+clearError(email)
+clearError(password)
+
+if(!email.value.trim()){
+
+showError(email,"Email is required")
+valid=false
+
+}else if(!validateEmail(email.value)){
+
+showError(email,"Enter a valid email address")
+valid=false
+
+}
+
+if(!password.value.trim()){
+
+showError(password,"Password is required")
+valid=false
+
+}
+
+if(!valid) e.preventDefault()
+
+})
+
+</script>
+
+</body>
+</html>

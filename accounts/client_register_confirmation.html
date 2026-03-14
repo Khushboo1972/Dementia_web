@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registration Complete - Shallion Dementia Support</title>
+<style>
+:root {
+    --primary: #61251a;
+    --primary-dark: #3f140e;
+    --background: #F7F7F7;
+    --text: #0B0B0B;
+    --text-muted: #7f8c8d;
+    --success: #2F855A;
+    --error: #E53E3E;
+    --info: #61251a; /* Using primary as info color */
+    --warning: #F7F7F7;
+    --radius: 8px;
+    --spacing: 8px;
+    --font-body: 'Montserrat', sans-serif;
+    --font-hero: 'Libre Baskerville', serif;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
+    background: var(--background);
+    color: var(--text);
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.confirmation-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: var(--background);
+}
+
+.confirmation-box {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+    animation: slideUp 0.5s ease;
+}
+
+.confirmation-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.confirmation-header h2 {
+    color: var(--success);
+    font-family: var(--font-hero);
+    font-size: 32px;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.confirmation-header p {
+    color: var(--text-muted);
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.success-icon {
+    font-size: 60px;
+    color: var(--success);
+    margin-bottom: 25px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.status-container {
+    background: var(--background);
+    border-radius: var(--radius);
+    padding: 30px;
+    margin: 30px 0;
+    border-left: 5px solid var(--primary);
+}
+
+.status-container h3 {
+    color: var(--text);
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.status-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.status-item:last-child { border-bottom: none; }
+
+.status-label { color: var(--text); font-weight: 500; }
+
+.status-value {
+    font-weight: 600;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.status-pending {
+    background: #FEEBC8;
+    color: #9C531E;
+    border: 1px solid #F6AD55;
+}
+
+.status-review {
+    background: #C6F6D5;
+    color: var(--success);
+    border: 1px solid #2F855A;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    flex: 1;
+    min-width: 200px;
+    padding: 15px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(97,37,26,0.3);
+}
+
+.btn-secondary {
+    background: var(--success);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #276D46;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(47,133,90,0.3);
+}
+
+.contact-info {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.contact-info p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.contact-info a { color: var(--primary); font-weight: 600; }
+
+.contact-info a:hover { text-decoration: underline; }
+
+@media (max-width: 576px) {
+    .confirmation-box { padding: 30px 20px; }
+    .btn-container { flex-direction: column; }
+    .btn { width: 100%; min-width: unset; }
+    .status-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="confirmation-container">
+    <div class="confirmation-box">
+        <div class="confirmation-header">
+            <div class="success-icon">✓</div>
+            <h2>Registration Complete!</h2>
+            <p>Your account has been created successfully</p>
+        </div>
+
+        <div class="status-container">
+            <h3>Important Next Steps:</h3>
+            <ul class="status-list">
+                <li class="status-item">
+                    <span class="status-label">1. Check your email for verification link</span>
+                    <span class="status-value status-pending">Pending</span>
+                </li>
+                <li class="status-item">
+                    <span class="status-label">2. GP Certificate is under review</span>
+                    <span class="status-value status-review">24-48 hours</span>
+                </li>
+                <li class="status-item">
+                    <span class="status-label">3. Complete your profile to get matched with volunteers</span>
+                    <span class="status-value status-pending">Not Started</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="status-container">
+            <h3>Current Status:</h3>
+            <ul class="status-list">
+                <li class="status-item">
+                    <span class="status-label">Email Verification</span>
+                    <span class="status-value status-pending">Pending Verification</span>
+                </li>
+                <li class="status-item">
+                    <span class="status-label">GP Certificate</span>
+                    <span class="status-value status-review">Under Review</span>
+                </li>
+                <li class="status-item">
+                    <span class="status-label">Account Status</span>
+                    <span class="status-value status-pending">Awaiting Verification</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="btn-container">
+            <a href="#" class="btn btn-primary">Go to Login</a>
+            <button class="btn btn-secondary" id="completeProfileBtn">Complete Profile</button>
+        </div>
+
+        <div class="contact-info">
+            <p><strong>Need help?</strong> Contact us at:<br>
+            <a href="mailto:support@shalliondementia.org">support@shalliondementia.org</a></p>
+            <p style="margin-top: 10px; font-size: 13px; color: #95a5a6;">
+                You will receive an email with further instructions shortly.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const completeProfileBtn = document.getElementById('completeProfileBtn');
+    completeProfileBtn.addEventListener('click', function() {
+        alert('Profile completion will be available after email verification.');
+    });
+
+    setTimeout(() => {
+        if (confirm('Check your verification status now?')) {
+            location.reload();
+        }
+    }, 30000);
+});
+</script>
+
+</body>
+</html>

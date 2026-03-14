@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Confirm Admin Logout - Shallion Dementia Support</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== DESIGN TOKENS ===== */
+
+:root{
+
+--primary:#61251a;
+--primary-dark:#3f140e;
+
+--background:#F7F7F7;
+--text:#0B0B0B;
+
+--success:#2F855A;
+--error:#E53E3E;
+--warning:#ffeaa7;
+
+--space-1:8px;
+--space-2:16px;
+--space-3:24px;
+--space-4:32px;
+
+--radius:8px;
+
+--shadow:0 2px 8px rgba(0,0,0,0.06);
+
+}
+
+/* ===== GLOBAL ===== */
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+body{
+
+font-family:"Montserrat",sans-serif;
+font-size:16px;
+background:var(--background);
+color:var(--text);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+min-height:100vh;
+
+}
+
+h1,h2,h3{
+font-family:"Libre Baskerville",serif;
+}
+
+/* ===== CARD ===== */
+
+.confirm-box{
+
+max-width:500px;
+width:90%;
+
+background:white;
+
+padding:40px;
+
+border-radius:var(--radius);
+
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
+
+text-align:center;
+
+animation:fadeIn 0.4s ease;
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:scale(0.95);
+}
+
+to{
+opacity:1;
+transform:scale(1);
+}
+
+}
+
+.warning-icon{
+
+font-size:50px;
+
+margin-bottom:20px;
+
+}
+
+/* ===== TEXT ===== */
+
+.confirm-box p{
+
+color:#666;
+
+margin-bottom:20px;
+
+}
+
+/* ===== WARNING BOX ===== */
+
+.warning-box{
+
+background:#fff3cd;
+
+border:2px solid var(--warning);
+
+border-radius:var(--radius);
+
+padding:18px;
+
+margin-bottom:25px;
+
+text-align:left;
+
+}
+
+.warning-box h3{
+
+margin-bottom:10px;
+
+font-size:16px;
+
+}
+
+.warning-box ul{
+
+padding-left:20px;
+
+color:#856404;
+
+}
+
+.warning-box li{
+
+margin-bottom:6px;
+
+}
+
+/* ===== BUTTONS ===== */
+
+.button-group{
+
+margin-top:20px;
+
+display:flex;
+gap:12px;
+justify-content:center;
+flex-wrap:wrap;
+
+}
+
+.btn{
+
+padding:12px 22px;
+
+border-radius:var(--radius);
+
+border:none;
+
+cursor:pointer;
+
+font-family:inherit;
+
+min-height:44px;
+
+text-decoration:none;
+
+display:inline-flex;
+align-items:center;
+justify-content:center;
+
+}
+
+.btn-danger{
+
+background:#e74c3c;
+color:white;
+
+}
+
+.btn-danger:hover{
+
+background:#c0392b;
+
+}
+
+.btn-primary{
+
+background:var(--primary);
+color:white;
+
+}
+
+.btn-primary:hover{
+
+background:var(--primary-dark);
+
+}
+
+/* ===== FOOTER LINK ===== */
+
+.back-home{
+
+margin-top:20px;
+font-size:14px;
+
+}
+
+.back-home a{
+
+color:var(--primary);
+text-decoration:none;
+
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media(max-width:500px){
+
+.confirm-box{
+padding:30px;
+}
+
+.button-group{
+flex-direction:column;
+}
+
+.btn{
+width:100%;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="confirm-box">
+
+<div class="warning-icon">⚠️</div>
+
+<h1>Confirm Admin Logout</h1>
+
+<p>
+You are about to log out from the admin panel.
+This will revoke all administrative privileges.
+</p>
+
+<div class="warning-box">
+
+<h3>Security Warning</h3>
+
+<ul>
+<li>Admin access will be revoked</li>
+<li>You will need to login again for admin privileges</li>
+<li>Ensure you are on a secure workstation</li>
+</ul>
+
+</div>
+
+<div class="button-group">
+
+<button class="btn btn-danger" onclick="confirmLogout()">
+Confirm Admin Logout
+</button>
+
+<a href="admin_dashboard.html" class="btn btn-primary">
+Cancel & Return
+</a>
+
+</div>
+
+<div class="back-home">
+
+<a href="index.html">← Back to Homepage</a>
+
+</div>
+
+</div>
+
+<script>
+
+/* confirm logout simulation */
+
+function confirmLogout(){
+
+alert("Admin session terminated")
+
+window.location.href = "admin_logout.html"
+
+}
+
+</script>
+
+</body>
+</html>

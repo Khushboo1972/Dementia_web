@@ -1,0 +1,1079 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Volunteer Dashboard{% endblock %}
+
+{% block extra_css %}
+<!-- Add Tailwind CSS if not in base.html -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<!-- Add Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    /* Custom CSS for Volunteer Dashboard */
+    :root {
+        --primary-color: #4f46e5;
+        --primary-hover: #6366f1;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-400: #9ca3af;
+        --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --gray-900: #111827;
+    }
+
+    /* Dashboard animations */
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Card hover effects */
+    .dashboard-card {
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        border-color: var(--gray-200);
+    }
+
+    /* Status badges */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    .status-badge i {
+        margin-right: 0.25rem;
+        font-size: 0.875rem;
+    }
+
+    .status-badge.success {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+
+    .status-badge.warning {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-badge.error {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
+
+    .status-badge.info {
+        background-color: #dbeafe;
+        color: #1e40af;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+        width: 100%;
+        height: 0.5rem;
+        background-color: var(--gray-200);
+        border-radius: 9999px;
+        overflow: hidden;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+        border-radius: 9999px;
+        transition: width 0.5s ease;
+    }
+
+    /* Quick action buttons */
+    .quick-action-btn {
+        transition: all 0.2s ease;
+        border: 1px solid var(--gray-200);
+        background: white;
+    }
+
+    .quick-action-btn:hover {
+        background: var(--gray-50);
+        border-color: var(--primary-color);
+    }
+
+    .quick-action-btn i {
+        transition: transform 0.2s ease;
+    }
+
+    .quick-action-btn:hover i {
+        transform: scale(1.1);
+    }
+
+    /* Notification toast */
+    .notification-toast {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 9999;
+        max-width: 24rem;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    .toast-success {
+        background-color: #d1fae5;
+        border-left: 4px solid var(--success-color);
+    }
+
+    .toast-error {
+        background-color: #fee2e2;
+        border-left: 4px solid var(--danger-color);
+    }
+
+    .toast-warning {
+        background-color: #fef3c7;
+        border-left: 4px solid var(--warning-color);
+    }
+
+    .toast-info {
+        background-color: #dbeafe;
+        border-left: 4px solid var(--primary-color);
+    }
+
+    /* Loading spinner */
+    .loading-spinner {
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        border: 2px solid var(--gray-200);
+        border-top-color: var(--primary-color);
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .notification-toast {
+            left: 1rem;
+            right: 1rem;
+            max-width: none;
+        }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+        .dark-mode-support {
+            background-color: var(--gray-800);
+            color: var(--gray-100);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100" id="dashboard-app">
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-lg p-6 flex flex-col items-center">
+            <div class="loading-spinner w-12 h-12"></div>
+            <p class="mt-4 text-gray-600">Loading...</p>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-4 right-4 z-50 hidden max-w-md w-full">
+        <!-- Notifications will appear here -->
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-semibold text-gray-800">
+                        <i class="fas fa-hands-helping mr-2 text-indigo-600"></i>
+                        Volunteer Dashboard
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Notifications Dropdown -->
+                    <div class="relative" id="notifications-dropdown">
+                        <button class="text-gray-600 hover:text-gray-900 focus:outline-none relative" onclick="toggleNotifications()">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center hidden" id="notification-badge">0</span>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg hidden" id="notifications-panel">
+                            <div class="p-4 border-b border-gray-200">
+                                <h3 class="text-sm font-semibold text-gray-700">Notifications</h3>
+                            </div>
+                            <div class="max-h-96 overflow-y-auto" id="notifications-list">
+                                <div class="p-4 text-center text-gray-500">No notifications</div>
+                            </div>
+                            <div class="p-3 text-center border-t border-gray-200">
+                                <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800">View all notifications</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Menu -->
+                    <div class="relative" id="user-menu">
+                        <button class="flex items-center space-x-2 text-gray-600 hover:text-gray-900 focus:outline-none" onclick="toggleUserMenu()">
+                            <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                                <span class="text-indigo-800 font-semibold">{{ user.full_name|make_list|first|upper }}</span>
+                            </div>
+                            <span>{{ user.full_name }}</span>
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden" id="user-menu-panel">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user mr-2"></i> Profile
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-cog mr-2"></i> Settings
+                            </a>
+                            <div class="border-t border-gray-200"></div>
+                            <form method="post" action="{% url 'volunteer_logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 fade-in">
+        <!-- Status Alert -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-4 p-4 rounded-md {% if message.tags == 'success' %}bg-green-50 text-green-800 border-l-4 border-green-400{% elif message.tags == 'error' %}bg-red-50 text-red-800 border-l-4 border-red-400{% else %}bg-blue-50 text-blue-800 border-l-4 border-blue-400{% endif %}">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            {% if message.tags == 'success' %}
+                                <i class="fas fa-check-circle text-green-400"></i>
+                            {% elif message.tags == 'error' %}
+                                <i class="fas fa-exclamation-circle text-red-400"></i>
+                            {% else %}
+                                <i class="fas fa-info-circle text-blue-400"></i>
+                            {% endif %}
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm">{{ message }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Account Status Banner -->
+        <div class="mb-6">
+            {% if user.status == 'PENDING' %}
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-clock text-yellow-400 text-xl"></i>
+                        </div>
+                        <div class="ml-3 flex-1">
+                            <p class="text-sm text-yellow-700">
+                                <strong class="font-semibold">Account Status: Pending Verification</strong> - Your account is awaiting PVG verification. This process typically takes 1-2 business days.
+                            </p>
+                            <div class="mt-2">
+                                <div class="progress-bar w-64">
+                                    <div class="progress-bar-fill" style="width: 50%"></div>
+                                </div>
+                                <p class="text-xs text-yellow-600 mt-1">Verification in progress...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% elif user.status == 'ACTIVE' %}
+                <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-400 text-xl"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-green-700">
+                                <strong class="font-semibold">Account Status: Active</strong> - Your PVG has been verified. You can now accept assignments and start volunteering.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% elif user.status == 'SUSPENDED' %}
+                <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-triangle text-red-400 text-xl"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-red-700">
+                                <strong class="font-semibold">Account Status: Suspended</strong> - Please contact support at <a href="mailto:support@example.com" class="underline font-medium">support@example.com</a> for assistance.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% elif user.status == 'INACTIVE' %}
+                <div class="bg-gray-50 border-l-4 border-gray-400 p-4 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-pause-circle text-gray-400 text-xl"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-gray-700">
+                                <strong class="font-semibold">Account Status: Inactive</strong> - Your account is currently inactive. Contact support to reactivate.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Welcome Banner -->
+        <div class="mb-6 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold">Welcome back, {{ user.full_name }}!</h2>
+                    <p class="text-indigo-100 mt-1">Here's what's happening with your volunteer activities today.</p>
+                </div>
+                <div class="hidden sm:block">
+                    <i class="fas fa-hands-helping text-6xl opacity-25"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <!-- Total Hours Card -->
+            <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-clock text-2xl text-blue-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Total Hours</dt>
+                                <dd class="text-2xl font-semibold text-gray-900" id="total-hours">0</dd>
+                                <dd class="text-xs text-gray-500">This month: <span id="monthly-hours">0</span></dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assignments Card -->
+            <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-calendar-check text-2xl text-green-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Assignments</dt>
+                                <dd class="text-2xl font-semibold text-gray-900" id="total-assignments">0</dd>
+                                <dd class="text-xs text-gray-500">Completed: <span id="completed-assignments">0</span></dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PVG Status Card -->
+            <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-2xl text-purple-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">PVG Status</dt>
+                                <dd class="mt-2">
+                                    <span class="status-badge {% if user.pvg_verified %}success{% else %}warning{% endif %}">
+                                        <i class="fas {% if user.pvg_verified %}fa-check-circle{% else %}fa-clock{% endif %}"></i>
+                                        {% if user.pvg_verified %}Verified{% else %}Pending{% endif %}
+                                    </span>
+                                </dd>
+                                {% if user.pvg_verified_at %}
+                                    <dd class="text-xs text-gray-500 mt-1">Verified: {{ user.pvg_verified_at|date:"M d, Y" }}</dd>
+                                {% endif %}
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rating Card -->
+            <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-star text-2xl text-yellow-600"></i>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Volunteer Rating</dt>
+                                <dd class="text-2xl font-semibold text-gray-900" id="volunteer-rating">0.0</dd>
+                                <dd class="text-xs text-gray-500">Based on <span id="review-count">0</span> reviews</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Column -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Upcoming Assignments -->
+                <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+                    <div class="p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 flex items-center">
+                                <i class="fas fa-calendar-alt mr-2 text-indigo-600"></i>
+                                Upcoming Assignments
+                            </h3>
+                            <a href="#" class="text-sm text-indigo-600 hover:text-indigo-900">View all</a>
+                        </div>
+                        
+                        <div id="upcoming-assignments-list">
+                            <!-- Loading state -->
+                            <div class="text-center py-8 text-gray-500 hidden" id="upcoming-loading">
+                                <i class="fas fa-spinner fa-spin text-3xl text-indigo-500"></i>
+                                <p class="mt-2">Loading assignments...</p>
+                            </div>
+                            
+                            <!-- No assignments state -->
+                            <div class="text-center py-8 text-gray-500" id="no-upcoming">
+                                <i class="fas fa-calendar-times text-4xl text-gray-300 mb-3"></i>
+                                <p class="text-sm">No upcoming assignments</p>
+                                <a href="#" class="mt-3 inline-block text-indigo-600 hover:text-indigo-900 text-sm font-medium">
+                                    Find available assignments <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                            
+                            <!-- Assignments list -->
+                            <div class="space-y-3 hidden" id="upcoming-list">
+                                <!-- Assignment items will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+                    <div class="p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 flex items-center">
+                                <i class="fas fa-history mr-2 text-gray-500"></i>
+                                Recent Activity
+                            </h3>
+                            <a href="#" class="text-sm text-indigo-600 hover:text-indigo-900">View all</a>
+                        </div>
+                        
+                        <div id="activity-feed">
+                            <div class="text-center py-8 text-gray-500" id="no-activity">
+                                <i class="fas fa-inbox text-4xl text-gray-300 mb-3"></i>
+                                <p class="text-sm">No recent activity</p>
+                            </div>
+                            
+                            <div class="flow-root hidden" id="activity-list">
+                                <ul class="-mb-8">
+                                    <!-- Activity items will go here -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="space-y-6">
+                <!-- Profile Summary Card -->
+                <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+                    <div class="p-5">
+                        <div class="flex items-center mb-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user-circle text-3xl text-indigo-600"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">{{ user.full_name }}</h3>
+                                <p class="text-sm text-gray-500">{{ user.email }}</p>
+                                <p class="text-sm text-gray-500">{{ user.phone|default:"No phone provided" }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-gray-200 pt-4">
+                            <dl class="space-y-2">
+                                <div class="flex justify-between">
+                                    <dt class="text-sm text-gray-500">PVG Number:</dt>
+                                    <dd class="text-sm font-medium text-gray-900">{{ user.pvg_number|default:"Not provided" }}</dd>
+                                </div>
+                                <div class="flex justify-between">
+                                    <dt class="text-sm text-gray-500">Member since:</dt>
+                                    <dd class="text-sm text-gray-900">{{ user.date_joined|date:"M d, Y" }}</dd>
+                                </div>
+                                <div class="flex justify-between">
+                                    <dt class="text-sm text-gray-500">Last login:</dt>
+                                    <dd class="text-sm text-gray-900">
+                                        {% if user.last_login %}
+                                            {{ user.last_login|date:"M d, Y H:i" }}
+                                        {% else %}
+                                            <span class="text-gray-400 italic">First login</span>
+                                        {% endif %}
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex justify-between items-center text-sm mb-1">
+                                <span class="text-gray-600">Profile completion</span>
+                                <span class="font-semibold text-indigo-600">{{ user.profile_completion_percentage }}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: {{ user.profile_completion_percentage }}%"></div>
+                            </div>
+                            <div class="mt-3">
+                                <a href="#" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
+                                    Complete profile <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Card -->
+                <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+                    <div class="p-5">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 flex items-center mb-4">
+                            <i class="fas fa-bolt mr-2 text-yellow-500"></i>
+                            Quick Actions
+                        </h3>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="handleQuickAction('find-assignments')" class="quick-action-btn p-3 text-center rounded-lg">
+                                <i class="fas fa-search text-xl text-indigo-500 mb-1"></i>
+                                <span class="text-xs block">Find Assignments</span>
+                            </button>
+                            
+                            <button onclick="handleQuickAction('my-schedule')" class="quick-action-btn p-3 text-center rounded-lg">
+                                <i class="fas fa-calendar-alt text-xl text-green-500 mb-1"></i>
+                                <span class="text-xs block">My Schedule</span>
+                            </button>
+                            
+                            <button onclick="handleQuickAction('log-hours')" class="quick-action-btn p-3 text-center rounded-lg">
+                                <i class="fas fa-clock text-xl text-blue-500 mb-1"></i>
+                                <span class="text-xs block">Log Hours</span>
+                            </button>
+                            
+                            <button onclick="handleQuickAction('messages')" class="quick-action-btn p-3 text-center rounded-lg">
+                                <i class="fas fa-envelope text-xl text-purple-500 mb-1"></i>
+                                <span class="text-xs block">Messages</span>
+                            </button>
+                            
+                            <button onclick="handleQuickAction('availability')" class="quick-action-btn p-3 text-center rounded-lg">
+                                <i class="fas fa-clock text-xl text-yellow-500 mb-1"></i>
+                                <span class="text-xs block">Availability</span>
+                            </button>
+                            
+                            <button onclick="handleQuickAction('reports')" class="quick-action-btn p-3 text-center rounded-lg">
+                                <i class="fas fa-chart-bar text-xl text-red-500 mb-1"></i>
+                                <span class="text-xs block">Reports</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Availability Card -->
+                <div class="bg-white overflow-hidden shadow rounded-lg dashboard-card">
+                    <div class="p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 flex items-center">
+                                <i class="fas fa-clock mr-2 text-green-600"></i>
+                                My Availability
+                            </h3>
+                            <button onclick="editAvailability()" class="text-sm text-indigo-600 hover:text-indigo-900">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                        </div>
+                        
+                        <div id="availability-list" class="space-y-2">
+                            <!-- This would be populated from a JSON field -->
+                            <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                <span class="text-sm font-medium">Monday</span>
+                                <span class="text-sm text-gray-600">9:00 AM - 5:00 PM</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                <span class="text-sm font-medium">Wednesday</span>
+                                <span class="text-sm text-gray-600">1:00 PM - 5:00 PM</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                <span class="text-sm font-medium">Friday</span>
+                                <span class="text-sm text-gray-600">9:00 AM - 3:00 PM</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">Set your availability to receive matching assignments</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Availability Modal -->
+    <div id="availability-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-lg max-w-md w-full mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Edit Availability</h3>
+                    <button onclick="closeAvailabilityModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <form id="availability-form">
+                    {% csrf_token %}
+                    <div class="space-y-4">
+                        <!-- Monday -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="mon-available" class="mr-2">
+                                <label for="mon-available" class="text-sm font-medium text-gray-700">Monday</label>
+                            </div>
+                            <div class="flex space-x-2">
+                                <input type="time" id="mon-start" value="09:00" class="text-sm border rounded px-2 py-1">
+                                <span class="text-gray-500">to</span>
+                                <input type="time" id="mon-end" value="17:00" class="text-sm border rounded px-2 py-1">
+                            </div>
+                        </div>
+                        
+                        <!-- Tuesday -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="tue-available" class="mr-2">
+                                <label for="tue-available" class="text-sm font-medium text-gray-700">Tuesday</label>
+                            </div>
+                            <div class="flex space-x-2">
+                                <input type="time" id="tue-start" value="09:00" class="text-sm border rounded px-2 py-1">
+                                <span class="text-gray-500">to</span>
+                                <input type="time" id="tue-end" value="17:00" class="text-sm border rounded px-2 py-1">
+                            </div>
+                        </div>
+                        
+                        <!-- Continue for all days... -->
+                        
+                        <div class="flex justify-end space-x-3 pt-4">
+                            <button type="button" onclick="closeAvailabilityModal()" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-4 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700">
+                                Save Availability
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Dashboard JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDashboard();
+    setupEventListeners();
+    loadDashboardData();
+});
+
+function initializeDashboard() {
+    // Add fade-in animation to cards
+    const cards = document.querySelectorAll('.dashboard-card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.add('fade-in');
+    });
+}
+
+function setupEventListeners() {
+    // Close menus on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeModals();
+        }
+    });
+
+    // Close menus when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#user-menu')) {
+            document.getElementById('user-menu-panel')?.classList.add('hidden');
+        }
+        if (!e.target.closest('#notifications-dropdown')) {
+            document.getElementById('notifications-panel')?.classList.add('hidden');
+        }
+    });
+}
+
+function loadDashboardData() {
+    showLoading();
+    
+    // Simulate API calls
+    setTimeout(() => {
+        // Update stats
+        document.getElementById('total-hours').textContent = '127';
+        document.getElementById('monthly-hours').textContent = '24';
+        document.getElementById('total-assignments').textContent = '18';
+        document.getElementById('completed-assignments').textContent = '15';
+        document.getElementById('volunteer-rating').textContent = '4.8';
+        document.getElementById('review-count').textContent = '12';
+        
+        // Load upcoming assignments
+        loadUpcomingAssignments();
+        
+        // Load activity feed
+        loadActivityFeed();
+        
+        hideLoading();
+    }, 1000);
+}
+
+function loadUpcomingAssignments() {
+    const upcomingList = document.getElementById('upcoming-list');
+    const noUpcoming = document.getElementById('no-upcoming');
+    
+    // Simulate data
+    const assignments = [
+        {
+            id: 1,
+            client: 'John Smith',
+            date: '2024-03-20',
+            time: '10:00 AM',
+            location: '123 Main St',
+            type: 'Healthcare Visit'
+        },
+        {
+            id: 2,
+            client: 'Mary Johnson',
+            date: '2024-03-22',
+            time: '2:00 PM',
+            location: '456 Oak Ave',
+            type: 'Transport'
+        },
+        {
+            id: 3,
+            client: 'Robert Brown',
+            date: '2024-03-25',
+            time: '11:30 AM',
+            location: '789 Pine Rd',
+            type: 'Companionship'
+        }
+    ];
+    
+    if (assignments.length > 0) {
+        noUpcoming.classList.add('hidden');
+        upcomingList.classList.remove('hidden');
+        
+        upcomingList.innerHTML = assignments.map(assignment => `
+            <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-medium text-gray-900">${assignment.client}</h4>
+                        <p class="text-sm text-gray-500">${assignment.type}</p>
+                        <div class="flex items-center mt-2 text-sm text-gray-600">
+                            <i class="fas fa-calendar mr-2"></i>
+                            <span>${assignment.date} at ${assignment.time}</span>
+                        </div>
+                        <div class="flex items-center mt-1 text-sm text-gray-600">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>${assignment.location}</span>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="acceptAssignment(${assignment.id})" class="px-3 py-1 bg-green-100 text-green-700 text-sm rounded hover:bg-green-200">
+                            Accept
+                        </button>
+                        <button onclick="declineAssignment(${assignment.id})" class="px-3 py-1 bg-red-100 text-red-700 text-sm rounded hover:bg-red-200">
+                            Decline
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+}
+
+function loadActivityFeed() {
+    const activityList = document.getElementById('activity-list');
+    const noActivity = document.getElementById('no-activity');
+    
+    // Simulate activity data
+    const activities = [
+        {
+            id: 1,
+            type: 'assignment_completed',
+            description: 'Completed healthcare visit with John Smith',
+            time: '2 hours ago',
+            icon: 'fa-check-circle',
+            color: 'text-green-500'
+        },
+        {
+            id: 2,
+            type: 'review_received',
+            description: 'Received a 5-star review from Mary Johnson',
+            time: '1 day ago',
+            icon: 'fa-star',
+            color: 'text-yellow-500'
+        },
+        {
+            id: 3,
+            type: 'assignment_accepted',
+            description: 'Accepted new assignment for Robert Brown',
+            time: '2 days ago',
+            icon: 'fa-calendar-check',
+            color: 'text-blue-500'
+        },
+        {
+            id: 4,
+            type: 'profile_updated',
+            description: 'Updated your availability schedule',
+            time: '3 days ago',
+            icon: 'fa-user-edit',
+            color: 'text-purple-500'
+        }
+    ];
+    
+    if (activities.length > 0) {
+        noActivity.classList.add('hidden');
+        activityList.classList.remove('hidden');
+        
+        activityList.innerHTML = `
+            <ul class="-mb-8">
+                ${activities.map((activity, index) => `
+                    <li>
+                        <div class="relative pb-8">
+                            ${index < activities.length - 1 ? '<span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>' : ''}
+                            <div class="relative flex space-x-3">
+                                <div>
+                                    <span class="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
+                                        <i class="fas ${activity.icon} ${activity.color}"></i>
+                                    </span>
+                                </div>
+                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                    <div>
+                                        <p class="text-sm text-gray-900">${activity.description}</p>
+                                    </div>
+                                    <div class="text-right text-sm whitespace-nowrap text-gray-500">
+                                        <time datetime="${activity.time}">${activity.time}</time>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+    }
+}
+
+// Notification functions
+function toggleNotifications() {
+    const panel = document.getElementById('notifications-panel');
+    panel.classList.toggle('hidden');
+    
+    if (!panel.classList.contains('hidden')) {
+        loadNotifications();
+    }
+}
+
+function loadNotifications() {
+    const notificationsList = document.getElementById('notifications-list');
+    
+    // Simulate notifications
+    const notifications = [
+        { id: 1, message: 'New assignment available in your area', type: 'info', time: '5 min ago' },
+        { id: 2, message: 'Reminder: Assignment tomorrow at 10 AM', type: 'warning', time: '1 hour ago' },
+        { id: 3, message: 'Your PVG verification is complete!', type: 'success', time: '2 hours ago' }
+    ];
+    
+    notificationsList.innerHTML = notifications.map(n => `
+        <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onclick="handleNotification(${n.id})">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class="fas ${n.type === 'success' ? 'fa-check-circle text-green-500' : n.type === 'warning' ? 'fa-exclamation-triangle text-yellow-500' : 'fa-info-circle text-blue-500'}"></i>
+                </div>
+                <div class="ml-3 flex-1">
+                    <p class="text-sm text-gray-900">${n.message}</p>
+                    <p class="text-xs text-gray-500 mt-1">${n.time}</p>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    document.getElementById('notification-badge').classList.remove('hidden');
+    document.getElementById('notification-badge').textContent = notifications.length;
+}
+
+function handleNotification(id) {
+    console.log('Notification clicked:', id);
+    toggleNotifications();
+}
+
+// User menu functions
+function toggleUserMenu() {
+    document.getElementById('user-menu-panel').classList.toggle('hidden');
+}
+
+// Quick action handler
+function handleQuickAction(action) {
+    showNotification(`Redirecting to ${action.replace('-', ' ')}...`, 'info');
+    
+    // In production, redirect to actual pages
+    setTimeout(() => {
+        console.log(`Navigating to: ${action}`);
+    }, 1000);
+}
+
+// Assignment actions
+function acceptAssignment(id) {
+    showLoading();
+    setTimeout(() => {
+        hideLoading();
+        showNotification('Assignment accepted successfully!', 'success');
+    }, 1000);
+}
+
+function declineAssignment(id) {
+    if (confirm('Are you sure you want to decline this assignment?')) {
+        showLoading();
+        setTimeout(() => {
+            hideLoading();
+            showNotification('Assignment declined', 'info');
+        }, 1000);
+    }
+}
+
+// Availability functions
+function editAvailability() {
+    document.getElementById('availability-modal').classList.remove('hidden');
+    document.getElementById('availability-modal').classList.add('flex');
+}
+
+function closeAvailabilityModal() {
+    document.getElementById('availability-modal').classList.add('hidden');
+    document.getElementById('availability-modal').classList.remove('flex');
+}
+
+document.getElementById('availability-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    showLoading();
+    
+    setTimeout(() => {
+        hideLoading();
+        closeAvailabilityModal();
+        showNotification('Availability updated successfully!', 'success');
+    }, 1500);
+});
+
+// Loading functions
+function showLoading() {
+    document.getElementById('loading-overlay').classList.remove('hidden');
+    document.getElementById('loading-overlay').classList.add('flex');
+}
+
+function hideLoading() {
+    document.getElementById('loading-overlay').classList.add('hidden');
+    document.getElementById('loading-overlay').classList.remove('flex');
+}
+
+// Notification toast function
+function showNotification(message, type = 'info') {
+    const container = document.getElementById('notification-container');
+    const colors = {
+        'success': 'bg-green-50 border-green-400 text-green-800',
+        'error': 'bg-red-50 border-red-400 text-red-800',
+        'warning': 'bg-yellow-50 border-yellow-400 text-yellow-800',
+        'info': 'bg-blue-50 border-blue-400 text-blue-800'
+    };
+    const icons = {
+        'success': 'fa-check-circle',
+        'error': 'fa-exclamation-circle',
+        'warning': 'fa-exclamation-triangle',
+        'info': 'fa-info-circle'
+    };
+    
+    container.innerHTML = `
+        <div class="${colors[type]} border-l-4 p-4 rounded shadow-lg">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas ${icons[type]}"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm">${message}</p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.classList.remove('hidden');
+    
+    setTimeout(() => {
+        container.innerHTML = '';
+        container.classList.add('hidden');
+    }, 5000);
+}
+
+function closeModals() {
+    closeAvailabilityModal();
+    document.getElementById('user-menu-panel')?.classList.add('hidden');
+    document.getElementById('notifications-panel')?.classList.add('hidden');
+}
+</script>
+{% endblock %}

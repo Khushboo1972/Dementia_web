@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Manage Volunteers - Admin Panel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+
+<style>
+
+/* DESIGN TOKENS */
+:root {
+    --primary: #61251A;
+    --primary-dark: #3F140E;
+    --background: #F7F7F7;
+    --text: #0B0B0B;
+    --success: #2F855A;
+    --error: #E53E3E;
+    --warning: #856404;
+    --radius: 8px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* GLOBAL */
+body {
+    font-family: Montserrat, sans-serif;
+    background: var(--background);
+    margin: 0;
+    color: var(--text);
+}
+
+h1, h2, h3 {
+    font-family: "Libre Baskerville", serif;
+}
+
+/* LAYOUT */
+.manage-container {
+    max-width: 1300px;
+    margin: auto;
+    padding: 32px 20px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 16px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.page-title h1 {
+    font-size: 30px;
+    margin-bottom: 4px;
+}
+
+.page-title p {
+    color: #666;
+}
+
+/* BUTTONS */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    min-height: 44px;
+    text-decoration: none;
+    gap: 6px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--error);
+    color: white;
+}
+
+.btn-sm {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+/* STATS */
+.stats-bar {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 200px;
+    background: white;
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #666;
+}
+
+/* FILTERS */
+.filters-container {
+    background: white;
+    padding: 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 32px;
+}
+
+.filter-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.filter-input {
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: var(--radius);
+}
+
+/* TABLE */
+.table-container {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f3f3f3;
+}
+
+th, td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+tr:hover {
+    background: #fafafa;
+}
+
+/* USER */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+/* BADGES */
+.status {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.active {
+    background: var(--success);
+    color: white;
+}
+
+.pending {
+    background: #fff3cd;
+    color: var(--warning);
+}
+
+.suspended {
+    background: var(--error);
+    color: white;
+}
+
+/* ACTION BUTTONS */
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* EMPTY STATE */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="manage-container">
+
+<a href="#" class="back-link">← Back to Dashboard</a>
+
+<div class="page-header">
+
+<div class="page-title">
+<h1>Manage Volunteers</h1>
+<p>Review and manage volunteer accounts</p>
+</div>
+
+<button class="btn btn-primary">Export Volunteers</button>
+
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+<div class="stat-card">
+<div class="stat-value" id="totalVolunteers">0</div>
+<div class="stat-label">Total Volunteers</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-value" id="pendingVolunteers">0</div>
+<div class="stat-label">Pending Verification</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-value" id="activeVolunteers">0</div>
+<div class="stat-label">Active Volunteers</div>
+</div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters-container">
+<form class="filter-form">
+<div class="filter-group">
+<label>Search Volunteers</label>
+<input type="text" id="search" class="filter-input" placeholder="Search name or email">
+</div>
+
+<div class="filter-group">
+<label>Status</label>
+<select id="statusFilter" class="filter-input">
+<option value="">All</option>
+<option>Active</option>
+<option>Pending</option>
+<option>Suspended</option>
+</select>
+</div>
+
+<button class="btn btn-primary" type="button" onclick="applyFilters()">Apply Filters</button>
+</form>
+</div>
+
+<!-- TABLE -->
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Volunteer</th>
+<th>Email</th>
+<th>Status</th>
+<th>Registered</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="volunteerTable"></tbody>
+</table>
+
+<div id="emptyState" class="empty-state" style="display:none">
+<h3>No Volunteers Found</h3>
+<p>Try adjusting filters</p>
+</div>
+</div>
+</div>
+
+<script>
+const volunteers = [
+{ id:1,name:"Sarah Johnson",email:"sarah@email.com",status:"Active",date:"12 Mar 2024"},
+{ id:2,name:"Michael Brown",email:"michael@email.com",status:"Pending",date:"4 Apr 2024"},
+{ id:3,name:"Emily Davis",email:"emily@email.com",status:"Active",date:"8 May 2024"},
+{ id:4,name:"Daniel Wilson",email:"daniel@email.com",status:"Suspended",date:"16 Jun 2024"}
+];
+
+const table = document.getElementById("volunteerTable");
+
+function renderTable(data) {
+    table.innerHTML = "";
+    if (data.length === 0) {
+        document.getElementById("emptyState").style.display = "block";
+        return;
+    }
+    document.getElementById("emptyState").style.display = "none";
+    data.forEach(v => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+<td>
+<div class="user-info">
+<div class="user-avatar">${v.name.charAt(0)}</div>
+<div><strong>${v.name}</strong></div>
+</div>
+</td>
+<td>${v.email}</td>
+<td><span class="status ${v.status.toLowerCase()}">${v.status}</span></td>
+<td>${v.date}</td>
+<td>
+<div class="action-buttons">
+<button class="btn btn-sm btn-primary">View</button>
+<button class="btn btn-sm btn-success">Verify</button>
+<button class="btn btn-sm btn-danger">Suspend</button>
+</div>
+</td>`;
+        table.appendChild(row);
+    });
+    updateStats(data);
+}
+
+function applyFilters() {
+    const search = document.getElementById("search").value.toLowerCase();
+    const status = document.getElementById("statusFilter").value;
+    let filtered = volunteers.filter(v => {
+        let matchSearch = v.name.toLowerCase().includes(search) || v.email.toLowerCase().includes(search);
+        let matchStatus = status === "" || v.status === status;
+        return matchSearch && matchStatus;
+    });
+    renderTable(filtered);
+}
+
+function updateStats(data) {
+    document.getElementById("totalVolunteers").innerText = data.length;
+    document.getElementById("activeVolunteers").innerText = data.filter(v => v.status === "Active").length;
+    document.getElementById("pendingVolunteers").innerText = data.filter(v => v.status === "Pending").length;
+}
+
+document.getElementById("search").addEventListener("input", applyFilters);
+renderTable(volunteers);
+</script>
+
+</body>
+</html>

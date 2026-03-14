@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Login - Shallion Dementia Support</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== DESIGN TOKENS ===== */
+
+:root{
+
+--primary:#61251a;
+--primary-dark:#3f140e;
+
+--background:#F7F7F7;
+--text:#0B0B0B;
+
+--success:#2F855A;
+--error:#E53E3E;
+
+--space-1:8px;
+--space-2:16px;
+--space-3:24px;
+--space-4:32px;
+
+--radius:8px;
+
+--shadow:0 2px 8px rgba(0,0,0,0.06);
+
+}
+
+/* ===== GLOBAL ===== */
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+body{
+
+font-family:"Montserrat",sans-serif;
+font-size:16px;
+background:var(--background);
+color:var(--text);
+
+}
+
+h1,h2,h3{
+
+font-family:"Libre Baskerville",serif;
+
+}
+
+.container{
+
+max-width:1200px;
+margin:auto;
+padding:var(--space-3);
+
+}
+
+/* ===== AUTH LAYOUT ===== */
+
+.auth-container{
+
+min-height:100vh;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+padding:40px 20px;
+
+background:linear-gradient(135deg,#61251a,#3f140e);
+
+}
+
+.auth-box{
+
+background:white;
+
+border-radius:var(--radius);
+
+padding:40px;
+
+width:100%;
+max-width:420px;
+
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+
+}
+
+.auth-header{
+
+text-align:center;
+margin-bottom:var(--space-3);
+
+}
+
+.auth-header h2{
+
+margin-bottom:8px;
+
+}
+
+.auth-header p{
+
+color:#666;
+
+}
+
+/* ===== FORM ===== */
+
+.form-group{
+
+margin-bottom:var(--space-2);
+
+}
+
+label{
+
+display:block;
+margin-bottom:6px;
+font-weight:500;
+
+}
+
+input{
+
+width:100%;
+padding:12px;
+
+border-radius:var(--radius);
+border:1px solid #ddd;
+
+font-size:16px;
+
+}
+
+input:focus{
+
+outline:2px solid var(--primary);
+
+}
+
+/* ===== BUTTONS ===== */
+
+.btn{
+
+display:inline-block;
+
+padding:12px 18px;
+
+border:none;
+
+border-radius:var(--radius);
+
+cursor:pointer;
+
+font-family:inherit;
+
+min-height:44px;
+
+}
+
+.btn-primary{
+
+background:var(--primary);
+color:white;
+
+}
+
+.btn-primary:hover{
+
+background:var(--primary-dark);
+
+}
+
+.btn-outline{
+
+border:1px solid var(--primary);
+background:white;
+color:var(--primary);
+
+}
+
+.btn-outline:hover{
+
+background:var(--primary);
+color:white;
+
+}
+
+.button-group{
+
+display:flex;
+gap:10px;
+margin-top:var(--space-2);
+
+}
+
+/* ===== ALERT ===== */
+
+.alert{
+
+padding:12px;
+border-radius:var(--radius);
+margin-bottom:var(--space-2);
+font-size:14px;
+
+}
+
+.alert-error{
+
+background:#fdecea;
+color:var(--error);
+
+}
+
+.alert-success{
+
+background:#e6f6ee;
+color:var(--success);
+
+}
+
+/* ===== HELP ===== */
+
+.auth-switch{
+
+text-align:center;
+margin-top:var(--space-2);
+
+}
+
+.auth-switch a{
+
+color:var(--primary);
+
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media(max-width:500px){
+
+.auth-box{
+
+padding:30px;
+
+}
+
+.button-group{
+
+flex-direction:column;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="auth-container">
+
+<div class="auth-box">
+
+<div class="auth-header">
+
+<h2>Admin Login</h2>
+<p>Access the admin dashboard</p>
+
+</div>
+
+<!-- Example message -->
+<div class="alert alert-error">
+Invalid login credentials
+</div>
+
+<form id="loginForm">
+
+<div class="form-group">
+
+<label for="email">Email</label>
+
+<input
+type="email"
+id="email"
+placeholder="Enter admin email"
+required
+>
+
+</div>
+
+<div class="form-group">
+
+<label for="password">Password</label>
+
+<input
+type="password"
+id="password"
+placeholder="Enter password"
+required
+>
+
+</div>
+
+<div class="button-group">
+
+<button class="btn btn-primary" type="submit">
+Login as Admin
+</button>
+
+<button class="btn btn-outline" type="button">
+Cancel
+</button>
+
+</div>
+
+<div class="auth-switch">
+
+<p>Need help? <a href="#">Contact support</a></p>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+<script>
+
+/* simple login demo validation */
+
+const form = document.getElementById("loginForm")
+
+form.addEventListener("submit",function(e){
+
+e.preventDefault()
+
+alert("Login submitted (backend will handle authentication)")
+
+})
+
+</script>
+
+</body>
+</html>
